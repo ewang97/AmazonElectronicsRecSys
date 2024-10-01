@@ -1,0 +1,69 @@
+Recommendation System Pros:
+-Saves time
+-Surface products are more relevant
+-Personalization - each users recommendations are more likely to match preferences
+-Coverage - ability to 'cover' more products to recommend
+
+Types of recommendations:
+
+Un-personalized recommendations: sponsored products, popular categories
+
+
+Personalized: Tailored to each user,
+popular categories and sponsored can be personalized based on user preference
+
+Collaborative Filtering:
+-users collaborate based on their similar preferences
+-recsys that relies on user similarity
+-behavioral approach - user behavior, customer behavior
+
+Content Based filtering:
+-purely reliant on each individual user content - what did you purchase and how are other items similar to what you purchased.
+
+Hybrid - combination of the two.
+
+Common Metric when ratings are available: RMSE
+
+Problem space is completing of the user-item matrix where cells are populated by ratings or empty.
+
+Cold Start problem - new data/product or user for the first time and there is still a need to make a recommendation. Collaborative filtering fails here.
+Content based filtering can help with this.
+
+Content Filtering relies on embeddings: representations of items in a lower dimensional space for the sake of calculating similarity
+
+Embeddings are represented by latent dimensions - dimensions whose representations in their vectorized form are unknown, but have latent meaning behind determining recommendations
+
+
+Modeling Metrics, Business Metrics, Design Considerations
+
+Online and Offline modeling metrics.
+
+
+Modeling Metrics:
+-Precision/Precision@k/Average precision @k
+	- Out of all the recommendations made by the model, how many were right?
+	-@k, just means considering up to k recommendations, since users might only look at up to k items
+	-average precision @ k means averaging the precision@k at the correct recommendations up to k - this metric accounts for the ranking/order of the recommended items
+-Recall
+	-accouynts for variety, can't just recommend the same thing repeatedly - of all the PURCHASES made, how many did the model get right?
+
+Design Considerations:
+-Diversity - don't recommend the same products over and over
+-Relevance
+-Freshness/Recency - big in fashion industry. recommendations need to be for more recent items
+-Fairness - are products equally relevant to a diverse group of users?
+-Latency - Make predictions, how much time does the model take? With caching this is fine, but with new products added, it needs to make recommendations on the fly.
+
+Business Metrics:
+-Revenue
+-Products purchased
+-SUbscription
+-Customer growth
+
+Bridging Offline and Online Metrics:
+-A/B Testing
+-Held out offline testing
+-Internal testing and dog fooding
+
+
+Two-Tower Architecture

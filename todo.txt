@@ -1,0 +1,11 @@
+
+Steps: 
+
+1. Read and explore the given dataset.  (Rename column/add headers, plot histograms, find data characteristics) 
+2. Clean dataset to make it less sparse. ( For example, keep the users only who has given 50 or more number of ratings )  
+3. Split the data randomly into train and test dataset. ( split it in 70/30 ratio) 
+4. Build Popularity Recommender model for cold start case.  
+5. Build Collaborative Filtering model based on best cross validated score. 
+6. Evaluate both the models.  Once the model is trained on the training data, it can be used to compute the error (RMSE) on predictions made on the test data.  
+7. Get top - K ( K = 5) recommendations.  
+8. Summarise your insights. 
