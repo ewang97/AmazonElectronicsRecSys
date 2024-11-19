@@ -16,6 +16,7 @@ def data_preprocess(data = 'ratings_Electronics.csv', n_ratings = 10):
     user_grp = df.groupby("userId").filter(lambda x:x['rating'].count() >= n_ratings)
     user_grp.drop(['rating'],inplace=True,axis=1)
     user_prod = pd.merge(prod_grp,user_grp)
+    
 
     print(f"\n Data subsetted for users and items with more than ", n_ratings, " ratings.")
 
@@ -27,5 +28,5 @@ def data_preprocess(data = 'ratings_Electronics.csv', n_ratings = 10):
 
 
 if __name__ == "__main__":
-    data_preprocess(n_ratings = 20)
+    data_preprocess(n_ratings = 10)
     

@@ -11,6 +11,8 @@ from surprise import Dataset, Reader, SVD,NormalPredictor, accuracy
 from surprise.model_selection import cross_validate
 from surprise.model_selection import train_test_split as surprise_train_test_split
 
+from util import save_model,load_model
+
 def get_top_n(predictions, n=5):
 
     # First map the predictions to each user.
@@ -25,19 +27,23 @@ def get_top_n(predictions, n=5):
 
     return top_n
 
-def predict_svd(cleaned_csv_file = 'cleaned_df_20.csv'):
+def predict(cleaned_csv_file = 'cleaned_df_10.csv',latest_model = False):
 
     df = pd.read_csv(cleaned_csv_file)
     df.columns=['userId','productId','rating']
     reader = Reader(rating_scale=(1,5)) # rating scale range
     data = Dataset.load_from_df(df[['userId', 'productId', 'rating']], reader)
-    
-    model = SVD()
     # train_df, test_df = surprise_train_test_split(data, test_size=0.20)
     trainset = data.build_full_trainset()
-    print("Fitting SVD...")
-    model.fit(trainset)
+    if latest_model:
+        model = SVD()
+        print("Fitting SVD...")
+        model.fit(trainset)
 
+        save_model(model)
+    else:
+        model = load_model('model.pkl')
+        
     testset = trainset.build_anti_testset()
 
     predictions = model.test(testset)
@@ -47,7 +53,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Recommend Top K Products for a user ID")
     
     print("Generating predictions...")
-    predictions = predict_svd()
+    predictions = predict()
 
     print("Getting top n...")
     top_n = get_top_n(predictions, n=5)
