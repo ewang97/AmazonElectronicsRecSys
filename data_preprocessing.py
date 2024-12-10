@@ -5,7 +5,6 @@ import argparse
 
 def data_preprocess(data = 'ratings_Electronics.csv', n_ratings = 10):
     df = pd.read_csv(data)
-    df = df.iloc[:1500000,0:]
     df.columns=['userId','productId','rating','timestamp']
 
     df.drop('timestamp',axis=1, inplace=True)
@@ -16,15 +15,17 @@ def data_preprocess(data = 'ratings_Electronics.csv', n_ratings = 10):
     user_grp = df.groupby("userId").filter(lambda x:x['rating'].count() >= n_ratings)
     user_grp.drop(['rating'],inplace=True,axis=1)
     user_prod = pd.merge(prod_grp,user_grp)
+
+    final_df = user_prod.sample(frac=0.25, replace=False, random_state=0)
     
 
     print(f"\n Data subsetted for users and items with more than ", n_ratings, " ratings.")
 
-    print(f"\n Count of ratings remaining: " + str(user_prod.shape))
+    print(f"\n Count of ratings remaining: " + str(final_df.shape))
 
-    user_prod.to_csv("cleaned_df_" + str(n_ratings) + ".csv", index=False)
+    final_df.to_csv("cleaned_df_" + str(n_ratings) + ".csv", index=False)
 
-    return user_prod
+    return final_df
 
 
 if __name__ == "__main__":

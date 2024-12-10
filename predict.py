@@ -27,7 +27,7 @@ def get_top_n(predictions, n=5):
 
     return top_n
 
-def predict(cleaned_csv_file = 'cleaned_df_10.csv',latest_model = False):
+def predict(cleaned_csv_file = 'cleaned_df_20.csv',latest_model = False):
 
     df = pd.read_csv(cleaned_csv_file)
     df.columns=['userId','productId','rating']
@@ -43,6 +43,8 @@ def predict(cleaned_csv_file = 'cleaned_df_10.csv',latest_model = False):
         save_model(model)
     else:
         model = load_model('model.pkl')
+        print("Fitting SVDpp...")
+        model.fit(trainset)
         
     testset = trainset.build_anti_testset()
 
