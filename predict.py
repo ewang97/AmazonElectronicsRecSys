@@ -13,6 +13,23 @@ from surprise.model_selection import train_test_split as surprise_train_test_spl
 
 from util import save_model,load_model
 
+def popularity_recommend(cleaned_csv_file = 'cleaned_df_20.csv', n = 5):
+    df = pd.read_csv(cleaned_csv_file)
+    df.columns=['userId','productId','rating']
+    train_data, test_data = train_test_split(df, test_size = 0.3, random_state=5)
+
+    #Count of user_id for each unique product as recommendation score 
+    train_data_grouped = train_data.groupby('productId').agg({'userId': 'count'}).reset_index()
+    train_data_grouped.rename(columns = {'userId': 'score'},inplace=True)
+    
+    #Sort the products on recommendation score 
+    train_data_sort = train_data_grouped.sort_values(['score', 'productId'], ascending = [0,1]) 
+    train_data_sort['rank'] = train_data_sort['score'].rank(ascending=0, method='first') 
+
+    #Get the top n recommendations 
+    popularity_recommendations = train_data_sort.head(n) 
+    return popularity_recommendations 
+
 def get_top_n(predictions, n=5):
 
     # First map the predictions to each user.
@@ -52,16 +69,24 @@ def predict(cleaned_csv_file = 'cleaned_df_20.csv',latest_model = False):
     return predictions
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Recommend Top K Products for a user ID")
     
+    user_id = input("Enter a user id: ")
+
     print("Generating predictions...")
     predictions = predict()
 
     print("Getting top n...")
     top_n = get_top_n(predictions, n=5)
 
-    # Print the recommended items for each user
-    # for uid, user_ratings in top_n.items():
-    #     print(uid, [iid for (iid, _) in user_ratings])
+    #Predict top n product_ids for provided user_id
+    if user_id in top_n:
+        print(top_n[user_id])
+    else:
+        num_recs = input("User ID not found in dataset - please provide the number of popular products you would like recommended based on popularity: ")
+        pop_recs = popularity_recommend(n = num_recs)
+        print('Top ',num_recs,' Product Ids')
+        print(pop_recs)
 
-    print(top_n['A25RTRAPQAJBDJ'])
+    #Sample ID: A25RTRAPQAJBDJ
+
+    

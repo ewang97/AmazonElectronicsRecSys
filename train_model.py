@@ -9,24 +9,13 @@ from surprise import SlopeOne, CoClustering
 
 from util import save_model
 
-def train_model(data = 'cleaned_df_10.csv'):
+def train_model_svd(data = 'cleaned_df_10.csv'):
     reader = Reader(rating_scale=(1, 5))
 
     df = pd.read_csv(data)
     # Load data with rating scale
 
     dataset = Dataset.load_from_df(df,reader)
-
-    # knnbasic_cv = cross_validate(KNNBasic(), dataset, cv=5, n_jobs=5, verbose=True)
-    # knnmeans_cv = cross_validate(KNNWithMeans(), dataset, cv=5, n_jobs=5, verbose=True)
-    # knnz_cv = cross_validate(KNNWithZScore(), dataset, cv=5, n_jobs=5, verbose=True)
-    # svd_cv = cross_validate(SVD(), dataset, cv=5, n_jobs=5, verbose=True)
-    svdpp_cv = cross_validate(SVDpp(), dataset, cv=5, n_jobs=5, verbose=True)
-    # nmf_cv = cross_validate(NMF(), dataset, cv=5, n_jobs=5, verbose=True)
-    # slope_cv = cross_validate(SlopeOne(), dataset, cv=5, n_jobs=5, verbose=True)
-    # coclus_cv = cross_validate(CoClustering(), dataset, cv=5, n_jobs=5, verbose=True)
-
-    print('SVDpp', '\t\t', round(svdpp_cv['test_rmse'].mean(), 4), '\t', round(svdpp_cv['test_mae'].mean(), 4))
 
     trainset, testset = train_test_split(dataset, test_size=0.25)
 
@@ -56,4 +45,4 @@ def train_model(data = 'cleaned_df_10.csv'):
     return pred_svdpp
 
 if __name__ == "__main__":
-    train_model()
+    train_model_svd()
